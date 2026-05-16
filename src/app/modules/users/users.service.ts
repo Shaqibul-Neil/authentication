@@ -3,15 +3,7 @@ import { usersModel } from "./users.models";
 import { userValidation, type IUser } from "./users.validation";
 
 const createUserIntoDB = async (payload: IUser) => {
-  const validation =
-    userValidation.createUserValidationSchema.safeParse(payload);
-
-  if (!validation.success) {
-    const errorMessages = validation.error.issues.map((issue) => issue.message);
-    throw new AppError(errorMessages.join(", "), 400);
-  }
-
-  const result = await usersModel.createUser(validation.data);
+  const result = await usersModel.createUser(payload);
   return result;
 };
 

@@ -3,5 +3,7 @@ export class AppError extends Error {
   constructor(message: string, statusCode: number) {
     super(message);
     this.statusCode = statusCode;
+    //for cleaner error stack
+    Error.captureStackTrace(this, this.constructor);
   }
 }

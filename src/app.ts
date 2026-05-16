@@ -24,4 +24,12 @@ app.get("/", (req: TRequest, res: TResponse) => {
 // Global Error Handler
 app.use(globalErrorHandler);
 
+app.use((req: TRequest, res: TResponse) => {
+  res.status(404).json({
+    success: false,
+    message: "API NOT FOUND!",
+    errorSources: [{ path: req.originalUrl, message: "API Not Found" }],
+  });
+});
+
 export default app;
