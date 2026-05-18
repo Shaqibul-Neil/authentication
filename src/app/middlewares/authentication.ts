@@ -7,11 +7,11 @@ import type {
 import { AppError } from "../../shared/utils/appError";
 import config from "../../config";
 import { pool } from "../../db";
+import type { ROLES } from "../../shared/types";
 
-export const authentication = (...roles: string[]) => {
+export const authentication = (...roles: ROLES[]) => {
   return async (req: TRequest, res: TResponse, next: TNextFunction) => {
     try {
-      console.log(roles);
       //Check if token exists
       const token = req.headers.authorization;
       console.log(token);
@@ -22,7 +22,7 @@ export const authentication = (...roles: string[]) => {
       //decode adn verify the token
       const decoded = jwt.verify(
         token as string,
-        config.secret as string,
+        config.access_token_secret as string,
       ) as JwtPayload;
       if (!decoded) throw new AppError("Unauthorized", 401);
 

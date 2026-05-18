@@ -32,11 +32,24 @@ const loginUser = async (payload: ILoginUser) => {
     is_active: user.is_active,
     role: user.role,
   };
-  const accessToken = jwt.sign(jwtPayload, config.secret as string, {
-    expiresIn: "1D",
-  });
-  return { accessToken };
+  const accessToken = jwt.sign(
+    jwtPayload,
+    config.access_token_secret as string,
+    {
+      expiresIn: "1D",
+    },
+  );
+  const refreshToken = jwt.sign(
+    jwtPayload,
+    config.refresh_token_secret as string,
+    {
+      expiresIn: "365D",
+    },
+  );
+  return { accessToken, refreshToken };
 };
+
+const refreshTokenInDB = async (token: string) => {};
 
 export const authModels = {
   loginUser,

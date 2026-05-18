@@ -5,6 +5,12 @@ import { authServices } from "./auth.service";
 
 const loginUser = asyncHandler(async (req: TRequest, res: TResponse) => {
   const result = await authServices.loginUserIntoDB(req.body);
+  const { refreshToken } = result;
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: false, //In production make it true
+    sameSite: "lax",
+  });
   return sendResponse({
     res,
     success: true,
@@ -14,6 +20,20 @@ const loginUser = asyncHandler(async (req: TRequest, res: TResponse) => {
   });
 });
 
+const refreshToken = asyncHandler(async (req: TRequest, res: TResponse) => {
+  const result = await authServices.generateRefreshToken(
+    req.cookies.refreshToken,
+  );
+  return sendResponse({
+    res,
+    success: true,
+    message: "Access Token generated successfully",
+    data: result,
+    status: 200,
+  });
+});
+
 export const authController = {
   loginUser,
+  refreshToken,
 };
