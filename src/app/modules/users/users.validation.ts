@@ -5,6 +5,7 @@ const createUserValidationSchema = z.object({
   email: z.email("Invalid email address"),
   password: z.string().min(10, "Password must be at least 10 characters"),
   age: z.number().optional(),
+  role: z.enum(["admin", "user"]).default("user"),
 });
 
 export const userValidation = {

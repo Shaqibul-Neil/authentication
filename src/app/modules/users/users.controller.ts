@@ -17,6 +17,7 @@ const createUser = asyncHandler(async (req: TRequest, res: TResponse) => {
 
 //GET users
 const getAllUsers = asyncHandler(async (req: TRequest, res: TResponse) => {
+  console.log(req.user);
   const result = await userServices.getAllUsersFromDB();
 
   sendResponse({

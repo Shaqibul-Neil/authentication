@@ -3,16 +3,16 @@ import { pool } from "../../../db";
 import type { IUser } from "./users.validation";
 
 const createUser = async (payload: IUser) => {
-  const { name, email, password, age } = payload;
+  const { name, email, password, age, role } = payload;
   const hashPassword = await bcrypt.hash(password, 10);
   const result = await pool.query(
     `
     INSERT INTO users 
-    (name, email, password, age) 
-    VALUES ($1, $2, $3, $4) 
+    (name, email, password, age, role) 
+    VALUES ($1, $2, $3, $4, COALESCE($5,'user')) 
     RETURNING *
     `,
-    [name, email, hashPassword, age],
+    [name, email, hashPassword, age, role],
   );
   delete result.rows[0].password;
   return result.rows[0];
@@ -42,7 +42,7 @@ const getSingleUser = async (id: string) => {
 };
 
 const updateUser = async (id: string, payload: Partial<IUser>) => {
-  const { name, email, password, age } = payload;
+  const { name, email, password, age, role } = payload;
   const result = await pool.query(
     `UPDATE users 
      SET 
@@ -50,9 +50,10 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
      email = COALESCE($2, email), 
      password = COALESCE($3, password), 
      age = COALESCE($4, age), 
+     role = COALESCE($5, role), 
      updated_at = NOW()
-     WHERE id = $5 RETURNING *`,
-    [name, email, password, age, id],
+     WHERE id = $6 RETURNING *`,
+    [name, email, password, age, role, id],
   );
   delete result.rows[0].password;
   return result.rows[0];

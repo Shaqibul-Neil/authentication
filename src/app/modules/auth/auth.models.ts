@@ -30,9 +30,10 @@ const loginUser = async (payload: ILoginUser) => {
     name: user.name,
     email: user.email,
     is_active: user.is_active,
+    role: user.role,
   };
   const accessToken = jwt.sign(jwtPayload, config.secret as string, {
-    expiresIn: "1h",
+    expiresIn: "1D",
   });
   return { accessToken };
 };

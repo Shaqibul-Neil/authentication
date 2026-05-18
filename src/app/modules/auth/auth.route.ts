@@ -7,7 +7,6 @@ import { authentication } from "../../middlewares/authentication";
 const router = Router();
 router.post(
   "/login",
-  authentication(),
   validateRequest(loginValidation.loginUserValidationSchema),
   authController.loginUser,
 );
