@@ -6,6 +6,7 @@ import type {
 } from "./shared/types/express.types";
 import appRouter from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalErrorHandlers";
+import logger from "./app/middlewares/logger";
 
 const app: TApplication = express();
 
@@ -13,6 +14,7 @@ const app: TApplication = express();
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+app.use(logger);
 
 //Application routes
 app.use("/api", appRouter);
